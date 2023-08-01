@@ -29,9 +29,11 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var checkButton: Button
 
     private lateinit var questionsList: MutableList<Question>
-    private val currentPosition = 1
+    private var questionsCounter = 0
+    private lateinit var currentQuestion: Question
+    private var answered = false
 
-    private var selectedOptionPosition = 0
+    private var selectedAnswer = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,25 +60,30 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         questionsList = Constants.getQuestions()
         Log.d("QuestionSize", "${questionsList.size}")
 
-        setQuestion()
+        showNextQuestion()
     }
 
-    private fun setQuestion() {
-        val question = questionsList[currentPosition - 1]
+    private fun showNextQuestion() {
+        resetOptions()
+        val question = questionsList[questionsCounter]
         flagImage.setImageResource(question.image)
-        progressBar.progress = currentPosition
-        textViewProgress.text = "$currentPosition/${progressBar.max}"
+        progressBar.progress = questionsCounter
+        textViewProgress.text = "$questionsCounter/${progressBar.max}"
         textViewQuestion.text = question.question
         textViewOptionOne.text = question.optionOne
         textViewOptionTwo.text = question.optionTwo
         textViewOptionThree.text = question.optionThree
         textViewOptionFour.text = question.optionFour
 
-        if (currentPosition == questionsList.size) {
-            checkButton.text = "FINISH"
-        } else {
+        if (questionsCounter < questionsList.size) {
             checkButton.text = "CHECK"
+            currentQuestion = questionsList[questionsCounter]
+        } else {
+            checkButton.text = "FINISH"
         }
+
+        questionsCounter++
+        answered = false
     }
 
     private fun resetOptions() {
@@ -96,10 +103,67 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private fun selectedOption(textView: TextView, selectedOptionNumber: Int) {
         resetOptions()
 
-        selectedOptionPosition = selectedOptionNumber
+        selectedAnswer = selectedOptionNumber
         textView.setTextColor(Color.parseColor("#363A43"))
         textView.setTypeface(textView.typeface, Typeface.BOLD)
         textView.background = ContextCompat.getDrawable(this, R.drawable.selected_option_border_bg)
+    }
+
+    private fun checkAnswer() {
+        answered = true
+        Log.d("Selected/Correct", "${selectedAnswer}/${currentQuestion.correctAnswer}")
+        if (selectedAnswer == currentQuestion.correctAnswer) {
+            when (selectedAnswer) {
+                1 -> {
+                    textViewOptionOne.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
+                }
+                2 -> {
+                    textViewOptionTwo.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
+                }
+                3 -> {
+                    textViewOptionThree.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
+                }
+                4 -> {
+                    textViewOptionFour.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
+                }
+            }
+        } else {
+            when (selectedAnswer) {
+                1 -> {
+                    textViewOptionOne.background = ContextCompat.getDrawable(this, R.drawable.wrong_option_border_bg)
+                }
+                2 -> {
+                    textViewOptionTwo.background = ContextCompat.getDrawable(this, R.drawable.wrong_option_border_bg)
+                }
+                3 -> {
+                    textViewOptionThree.background = ContextCompat.getDrawable(this, R.drawable.wrong_option_border_bg)
+                }
+                4 -> {
+                    textViewOptionFour.background = ContextCompat.getDrawable(this, R.drawable.wrong_option_border_bg)
+                }
+            }
+        }
+
+        checkButton.text = "NEXT"
+        showSolution()
+    }
+
+    private fun showSolution() {
+        selectedAnswer = currentQuestion.correctAnswer
+        when (selectedAnswer) {
+            1 -> {
+                textViewOptionOne.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
+            }
+            2 -> {
+                textViewOptionTwo.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
+            }
+            3 -> {
+                textViewOptionThree.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
+            }
+            4 -> {
+                textViewOptionFour.background = ContextCompat.getDrawable(this, R.drawable.correct_option_border_bg)
+            }
+        }
     }
 
     override fun onClick(view: View?) {
@@ -116,7 +180,14 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
             R.id.text_view_option_four -> {
                 selectedOption(textViewOptionFour, 4)
             }
-            R.id.check_button -> {}
+            R.id.check_button -> {
+                if (!answered) {
+                    checkAnswer()
+                } else {
+                    showNextQuestion()
+                }
+                selectedAnswer = 0
+            }
         }
     }
 }
