@@ -4,4 +4,6 @@
     <string name="welcome">Welcome</string>
     <string name="name">Name</string>
     <string name="start">start</string>
+    <string name="image_flag">Image Flag</string>
+    <string name="check">Check</string>
 </resources>
