@@ -11,7 +11,7 @@ object Constants {
             1, "What country does this flag belong?",
             R.drawable.italy_flag, "Iran",
             "India", "Italy", "Ireland",
-            1
+            3
         )
         questions.add(quest1);
 
