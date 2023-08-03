@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
         val startButton: Button = findViewById(R.id.button_start)
         val editTextName: EditText = findViewById(R.id.name)
 
+        editTextName.requestFocus()
+
         startButton.setOnClickListener {
             if (editTextName.text.isNotEmpty()) {
                 Intent(this@MainActivity, QuestionsActivity::class.java).also {

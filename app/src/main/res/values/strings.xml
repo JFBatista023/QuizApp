@@ -10,4 +10,5 @@
     <string name="trophy_image">Trophy Image</string>
     <string name="congratulations">Congratulations!</string>
     <string name="finish">FINISH</string>
+    <string name="please_enter_your_name">Please enter your name</string>
 </resources>

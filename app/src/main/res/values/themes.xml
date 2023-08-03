@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="colorSurface">@color/purple_500</item>
+        <item name="colorOnSurface">@color/white</item>
     </style>
 
     <style name="Theme.QuizApp.NoActionBar">
